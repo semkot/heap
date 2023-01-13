@@ -17,14 +17,18 @@ public class FibonacciHeap
 	private HeapNode first;
 	private HeapNode min;
 
+    private int size;
+
 	public FibonacciHeap() {
-		
+		this.first=null;
+        this.min=null;
+        this.size=0;
 	
 	}
 	
     public boolean isEmpty()
     {
-    	return false; // should be replaced by student code
+    	return this.min==0;
     }
 		
    /**
@@ -36,8 +40,25 @@ public class FibonacciHeap
     * Returns the newly created node.
     */
     public HeapNode insert(int key)
-    {    
-    	return new HeapNode(key); // should be replaced by student code
+    {
+        HeapNode newNode = new HeapNode(key);
+        if (this.min == null) {
+            //if heap is empty
+            this.first = newNode;
+            this.min = newNode;
+        } else {
+            //add the new node to the root list
+            newNode.prev = this.first;
+            newNode.next = this.first.next;
+            this.first.next.prev = newNode;
+            this.first.next = newNode;
+            if (key < min.key) {
+                //update the minimum
+                min = newNode;
+            }
+        }
+        size++;
+        return newNode;
     }
 
    /**
@@ -48,7 +69,39 @@ public class FibonacciHeap
     */
     public void deleteMin()
     {
-     	return; // should be replaced by student code
+        if (this.min == null) {
+            //if heap is empty
+            return;
+        }
+        HeapNode child = this.min.child;
+        if (child != null) {
+            //add the children of min to the root list
+            HeapNode current = child;
+            do {
+                current.parent = null;
+                current = current.next;
+            } while (current != child);
+            //merge the children with the root list
+            first.prev.next = child;
+            child.prev.next = first;
+            HeapNode temp = first.prev;
+            first.prev = child.prev;
+            child.prev = temp;
+        }
+        //remove min from the root list
+        min.prev.next = min.next;
+        min.next.prev = min.prev;
+        if (min == min.next) {
+            first = null;
+        } else {
+            first = min.next;
+        }
+        min = null;
+        size--;
+        if (size > 0) {
+            //consolidate the heap
+            consolidate();
+        }
      	
     }
 
