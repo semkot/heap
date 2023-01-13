@@ -14,6 +14,14 @@ public class FibonacciHeap
     * Returns true if and only if the heap is empty.
     *   
     */
+	private HeapNode first;
+	private HeapNode min;
+
+	public FibonacciHeap() {
+		
+	
+	}
+	
     public boolean isEmpty()
     {
     	return false; // should be replaced by student code
@@ -186,6 +194,12 @@ public class FibonacciHeap
     public static class HeapNode{
 
     	public int key;
+    	public HeapNode child; 
+    	public HeapNode next;
+    	public HeapNode prev;
+    	public HeapNode parent; 
+    	public boolean marked;
+    	public int rank;
 
     	public HeapNode(int key) {
     		this.key = key;
