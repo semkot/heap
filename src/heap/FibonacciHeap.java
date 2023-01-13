@@ -47,13 +47,11 @@ public class FibonacciHeap
             this.first = newNode;
             this.min = newNode;
         } else {
-            //add the new node to the root list
             newNode.prev = this.first;
             newNode.next = this.first.next;
             this.first.next.prev = newNode;
             this.first.next = newNode;
             if (key < min.key) {
-                //update the minimum
                 min = newNode;
             }
         }
@@ -75,20 +73,17 @@ public class FibonacciHeap
         }
         HeapNode child = this.min.child;
         if (child != null) {
-            //add the children of min to the root list
             HeapNode current = child;
             do {
                 current.parent = null;
                 current = current.next;
             } while (current != child);
-            //merge the children with the root list
             first.prev.next = child;
             child.prev.next = first;
             HeapNode temp = first.prev;
             first.prev = child.prev;
             child.prev = temp;
         }
-        //remove min from the root list
         min.prev.next = min.next;
         min.next.prev = min.prev;
         if (min == min.next) {
@@ -99,7 +94,6 @@ public class FibonacciHeap
         min = null;
         size--;
         if (size > 0) {
-            //consolidate the heap
             consolidate();
         }
      	
