@@ -43,7 +43,6 @@ public class FibonacciHeap
     {
         HeapNode newNode = new HeapNode(key);
         if (this.min == null) {
-            //if heap is empty
             this.first = newNode;
             this.min = newNode;
         } else {
@@ -51,11 +50,11 @@ public class FibonacciHeap
             newNode.next = this.first.next;
             this.first.next.prev = newNode;
             this.first.next = newNode;
-            if (key < min.key) {
+            if (key < this.min.key) {
                 min = newNode;
             }
         }
-        size++;
+        this.size++;
         return newNode;
     }
 
@@ -68,7 +67,6 @@ public class FibonacciHeap
     public void deleteMin()
     {
         if (this.min == null) {
-            //if heap is empty
             return;
         }
         HeapNode child = this.min.child;
@@ -78,21 +76,21 @@ public class FibonacciHeap
                 current.parent = null;
                 current = current.next;
             } while (current != child);
-            first.prev.next = child;
-            child.prev.next = first;
-            HeapNode temp = first.prev;
-            first.prev = child.prev;
+            this.first.prev.next = child;
+            child.prev.next = this.first;
+            HeapNode temp = this.first.prev;
+            this.first.prev = child.prev;
             child.prev = temp;
         }
-        min.prev.next = min.next;
-        min.next.prev = min.prev;
+        this.min.prev.next = min.next;
+        this.min.next.prev = min.prev;
         if (min == min.next) {
-            first = null;
+            this.first = null;
         } else {
-            first = min.next;
+            this.first = min.next;
         }
-        min = null;
-        size--;
+        this.min = null;
+        this.size--;
         if (size > 0) {
             consolidate();
         }
