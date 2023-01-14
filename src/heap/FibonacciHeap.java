@@ -14,9 +14,9 @@ public class FibonacciHeap
     * Returns true if and only if the heap is empty.
     *   
     */
-	private HeapNode first;
-	private HeapNode min;
-    private int size;
+	public HeapNode first;
+	public HeapNode min;
+    public int size;
 
     private static int totalCuts = 0;
     private static int totalLinks = 0;
@@ -113,9 +113,9 @@ public class FibonacciHeap
 
     private void consolidate() {
         int maxRank = (int) Math.floor(Math.log(this.size) ) + 2;
-        HeapNode[] A = new HeapNode[maxRank];
+        HeapNode[] bucketsList = new HeapNode[maxRank];
         for (int i = 0; i < maxRank; i++) {
-            A[i] = null;
+            bucketsList[i] = null;
         }
         HeapNode current = this.first;
         int numRoots = 0;
@@ -124,8 +124,8 @@ public class FibonacciHeap
             HeapNode x = current;
             int rank = x.rank;
             current = current.next;
-            while (A[rank] != null) {
-                HeapNode y = A[rank];
+            while (bucketsList[rank] != null) {
+                HeapNode y = bucketsList[rank];
                 if (x.key > y.key) {
                     HeapNode temp = x;
                     x = y;
@@ -140,26 +140,26 @@ public class FibonacciHeap
                 y.prev.next = y.next;
                 y.next.prev = y.prev;
                 x.addChild(y);
-                A[rank] = null;
+                bucketsList[rank] = null;
                 rank++;
             }
-            A[rank] = x;
+            bucketsList[rank] = x;
         } while (current != this.first);
         this.min = this.first;
         for (int i = 0; i < maxRank; i++) {
-            if (A[i] != null) {
-                if (A[i].key < this.min.key) {
-                    this.min = A[i];
+            if (bucketsList[i] != null) {
+                if (bucketsList[i].key < this.min.key) {
+                    this.min = bucketsList[i];
                 }
                 if (this.first == null) {
-                    this.first = A[i];
-                    A[i].prev = A[i];
-                    A[i].next = A[i];
+                    this.first = bucketsList[i];
+                    bucketsList[i].prev = bucketsList[i];
+                    bucketsList[i].next = bucketsList[i];
                 } else {
-                    A[i].prev = this.first.prev;
-                    A[i].next = this.first;
-                    this.first.prev.next = A[i];
-                    this.first.prev = A[i];
+                    bucketsList[i].prev = this.first.prev;
+                    bucketsList[i].next = this.first;
+                    this.first.prev.next = bucketsList[i];
+                    this.first.prev = bucketsList[i];
                 }
             }
         }

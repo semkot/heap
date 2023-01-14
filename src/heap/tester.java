@@ -16,25 +16,46 @@ public class tester {
 		f.insert(19);
 		f.insert(24);
 
+		f.deleteMin();
+//		System.out.println(f.first.child.next.next.next.next.next.key);
 
-		f.deleteMin();
-		System.out.println(f.findMin().key);
-		f.deleteMin();
-		System.out.println(f.findMin().key);
-		f.deleteMin();
-		System.out.println(f.findMin().key);
-		f.deleteMin();
-		System.out.println(f.findMin().key);
-		f.deleteMin();
-		System.out.println(f.findMin().key);
-		f.deleteMin();
-		System.out.println(f.findMin().key);
-		f.deleteMin();
-		System.out.println(f.findMin().key);
+
+
+		printHeap(f);
 
 
 
 	}
+	static void printHeap(FibonacciHeap f) {
+		if (f.isEmpty()) {
+			System.out.println("Heap is empty!");
+			return;
+		}
+		FibonacciHeap.HeapNode current = f.first;
+		do {
+			printNode(current, "", true);
+			current = current.next;
+		} while (current != f.first);
+	}
+
+
+	static void printNode(FibonacciHeap.HeapNode node, String prefix, boolean isTail) {
+		System.out.println(prefix + (isTail ? "└── " : "├── ") + node.key);
+		FibonacciHeap.HeapNode current = node.child;
+		if (current != null) {
+			printNode(current, prefix + (isTail ? "    " : "│   "), false);
+			current = current.next;
+			while (current != node.child) {
+				printNode(current, prefix + (isTail ? "    " : "│   "), false);
+				current = current.next;
+			}
+		}
+	}
+
+
+
+
+
 }
 
 
