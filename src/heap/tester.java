@@ -33,24 +33,28 @@ public class tester {
 		}
 		FibonacciHeap.HeapNode current = f.first;
 		do {
-			printNode(current, "", true);
+			printNode(current, null, "", true);
 			current = current.next;
 		} while (current != f.first);
 	}
 
-
-	static void printNode(FibonacciHeap.HeapNode node, String prefix, boolean isTail) {
-		System.out.println(prefix + (isTail ? "└── " : "├── ") + node.key);
+	static void printNode(FibonacciHeap.HeapNode node, FibonacciHeap.HeapNode parent, String prefix, boolean isTail) {
+		String parentString = "";
+		if (parent != null) {
+			parentString = " parent: " + parent.key;
+		}
+		System.out.println(prefix + (isTail ? "└── " : "├── ") + node.key + parentString);
 		FibonacciHeap.HeapNode current = node.child;
 		if (current != null) {
-			printNode(current, prefix + (isTail ? "    " : "│   "), false);
+			printNode(current, node, prefix + (isTail ? "    " : "│   "), false);
 			current = current.next;
 			while (current != node.child) {
-				printNode(current, prefix + (isTail ? "    " : "│   "), false);
+				printNode(current, node, prefix + (isTail ? "    " : "│   "), false);
 				current = current.next;
 			}
 		}
 	}
+
 
 
 
