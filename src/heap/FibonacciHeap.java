@@ -107,6 +107,18 @@ public class FibonacciHeap
             consolidate();
         }
         this.min = this.first;
+        if (this.size > 0) {
+            consolidate();
+            HeapNode current = this.first;
+            this.min = current;
+            do {
+                if (current.key < this.min.key) {
+                    this.min = current;
+                }
+                current = current.next;
+            } while (current != this.first);
+        }
+
 
     }
 

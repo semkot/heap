@@ -17,11 +17,22 @@ public class tester {
 		f.insert(24);
 
 		f.deleteMin();
-//		System.out.println(f.first.child.next.next.next.next.next.key);
-
-
-
+		System.out.println(f.min.key);
 		printHeap(f);
+		f.deleteMin();
+		System.out.println(f.min.key);
+		printHeap(f);
+		f.deleteMin();
+		System.out.println(f.min.key);
+		printHeap(f);
+		f.deleteMin();
+		System.out.println(f.min.key);
+		printHeap(f);
+
+
+
+
+
 
 
 
