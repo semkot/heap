@@ -16,8 +16,10 @@ public class FibonacciHeap
     */
 	private HeapNode first;
 	private HeapNode min;
-
     private int size;
+
+    private static int totalCuts = 0;
+    private static int totalLinks = 0;
 
 	public FibonacciHeap() {
 		this.first=null;
