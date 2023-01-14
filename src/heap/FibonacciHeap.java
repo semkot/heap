@@ -27,10 +27,13 @@ public class FibonacciHeap
         this.size=0;
 	
 	}
+    public int getSize(){
+        return this.size;
+    }
 	
     public boolean isEmpty()
     {
-    	return this.min==0;
+    	return (this.size==0);
     }
 		
    /**
@@ -44,23 +47,32 @@ public class FibonacciHeap
     public HeapNode insert(int key)
     {
         HeapNode newNode = new HeapNode(key);
-        if (this.min == null) {
-            this.first = newNode;
-            this.min = newNode;
-        } else {
-            newNode.prev = this.first;
-            newNode.next = this.first.next;
-            this.first.next.prev = newNode;
-            this.first.next = newNode;
-            if (key < this.min.key) {
-                min = newNode;
-            }
-        }
+        newNode.rank=0;
+        this.addToRootList(newNode);
         this.size++;
         return newNode;
     }
 
-   /**
+
+//     adds a node to the 'List' of trees of the heap
+    private void addToRootList(HeapNode node) {
+
+        if (this.first == null) {
+            this.first = node;
+            node.prev = node;
+            node.next = node;
+        } else {
+            node.prev = this.first.prev;
+            node.next = this.first;
+            this.first.prev.next = node;
+            this.first.prev = node;
+        }
+        if (this.min==null || node.key < this.min.key) {
+            this.min = node;
+        }
+    }
+
+    /**
     * public void deleteMin()
     *
     * Deletes the node containing the minimum key.
@@ -84,22 +96,78 @@ public class FibonacciHeap
             this.first.prev = child.prev;
             child.prev = temp;
         }
-        this.min.prev.next = min.next;
-        this.min.next.prev = min.prev;
-        if (min == min.next) {
-            this.first = null;
-        } else {
-            this.first = min.next;
+        if (this.min == this.first) {
+            this.first = this.first.next;
         }
+        this.min.prev.next = this.min.next;
+        this.min.next.prev = this.min.prev;
         this.min = null;
         this.size--;
-        if (size > 0) {
+        if (this.size > 0) {
             consolidate();
         }
-     	
+        this.min = this.first;
+
     }
 
-   /**
+
+    private void consolidate() {
+        int maxRank = (int) Math.floor(Math.log(this.size) ) + 2;
+        HeapNode[] A = new HeapNode[maxRank];
+        for (int i = 0; i < maxRank; i++) {
+            A[i] = null;
+        }
+        HeapNode current = this.first;
+        int numRoots = 0;
+        do {
+            numRoots++;
+            HeapNode x = current;
+            int rank = x.rank;
+            current = current.next;
+            while (A[rank] != null) {
+                HeapNode y = A[rank];
+                if (x.key > y.key) {
+                    HeapNode temp = x;
+                    x = y;
+                    y = temp;
+                }
+                if (y == this.first) {
+                    this.first = y.next;
+                }
+                if (y == this.min) {
+                    this.min = x;
+                }
+                y.prev.next = y.next;
+                y.next.prev = y.prev;
+                x.addChild(y);
+                A[rank] = null;
+                rank++;
+            }
+            A[rank] = x;
+        } while (current != this.first);
+        this.min = this.first;
+        for (int i = 0; i < maxRank; i++) {
+            if (A[i] != null) {
+                if (A[i].key < this.min.key) {
+                    this.min = A[i];
+                }
+                if (this.first == null) {
+                    this.first = A[i];
+                    A[i].prev = A[i];
+                    A[i].next = A[i];
+                } else {
+                    A[i].prev = this.first.prev;
+                    A[i].next = this.first;
+                    this.first.prev.next = A[i];
+                    this.first.prev = A[i];
+                }
+            }
+        }
+
+    }
+
+
+    /**
     * public HeapNode findMin()
     *
     * Returns the node of the heap whose key is minimal, or null if the heap is empty.
@@ -107,7 +175,7 @@ public class FibonacciHeap
     */
     public HeapNode findMin()
     {
-    	return new HeapNode(678);// should be replaced by student code
+    	return this.min;// should be replaced by student code
     } 
     
    /**
@@ -255,5 +323,41 @@ public class FibonacciHeap
     	public int getKey() {
     		return this.key;
     	}
-    }
+
+
+
+//        addchild: a function to add a child to a node and include all the pointers
+       public void addChild(HeapNode existingTree) {
+           if(existingTree.parent != null) {
+               existingTree.parent.removeChild(existingTree);
+           }
+           existingTree.parent = this;
+           existingTree.prev = existingTree;
+           existingTree.next = existingTree;
+           if(this.child == null) {
+               this.child = existingTree;
+           } else {
+               existingTree.prev = this.child.prev;
+               existingTree.next = this.child;
+               this.child.prev.next = existingTree;
+               this.child.prev = existingTree;
+           }
+           this.rank++;
+       }
+       //removeChild: a function to remove a child from a node and remove all the needed pointers
+       private void removeChild(HeapNode child) {
+           if (this.child == this.child.next) {
+               this.child = null;
+           } else {
+               child.prev.next = child.next;
+               child.next.prev = child.prev;
+               if (this.child == child) {
+                   this.child = child.next;
+               }
+           }
+           child.parent = null;
+           this.rank--;
+       }
+
+   }
 }
