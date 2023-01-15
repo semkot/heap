@@ -26,6 +26,7 @@ public class tester {
 		System.out.println(f.min.key);
 		printHeap(f);
 		f.deleteMin();
+		System.out.println(f.min.prev.key);
 		System.out.println(f.min.key);
 		printHeap(f);
 

@@ -85,10 +85,18 @@ public class FibonacciHeap
         }
         HeapNode child = this.min.child;
         if (child != null) {
-            HeapNode current = child;
+            HeapNode current = child;//22
             do {
                 current.parent = null;
-                current = current.next;
+                current = current.next;//22
+//                if (this.min==this.first && current.next==current){
+//                    this.first=current;
+//                    current.next=this.min.next;
+//                    current.prev=this.min.prev;
+//                    this.min.prev.next=current;
+//                    this.min.next.prev=current;
+//
+//                }
             } while (current != child);
             this.first.prev.next = child;
             child.prev.next = this.first;
@@ -103,9 +111,6 @@ public class FibonacciHeap
         this.min.next.prev = this.min.prev;
         this.min = null;
         this.size--;
-        if (this.size > 0) {
-            consolidate();
-        }
         this.min = this.first;
         if (this.size > 0) {
             consolidate();
