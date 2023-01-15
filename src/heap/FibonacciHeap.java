@@ -134,9 +134,15 @@ public class FibonacciHeap
         for (int i = 0; i < maxRank; i++) {
             bucketsList[i] = null;
         }
-
+        HeapNode curr=this.first;
+        curr=curr.next;
+        int counter=1;
+        while (curr!=this.first){
+            counter++;
+            curr=curr.next;
+        }
         // Create an array to store the roots of the heap
-        HeapNode[] roots = new HeapNode[this.size];
+        HeapNode[] roots = new HeapNode[counter];
         int numRoots = 0;
         HeapNode current = this.first;
         do {
