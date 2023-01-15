@@ -1,5 +1,7 @@
 package heap;
 
+import static heap.tester.printHeap;
+
 /**
  * FibonacciHeap
  *
@@ -89,14 +91,7 @@ public class FibonacciHeap
             do {
                 current.parent = null;
                 current = current.next;//22
-//                if (this.min==this.first && current.next==current){
-//                    this.first=current;
-//                    current.next=this.min.next;
-//                    current.prev=this.min.prev;
-//                    this.min.prev.next=current;
-//                    this.min.next.prev=current;
-//
-//                }
+
             } while (current != child);
             this.first.prev.next = child;
             child.prev.next = this.first;
@@ -163,12 +158,13 @@ public class FibonacciHeap
             bucketsList[rank] = x;
         } while (current != this.first);
         this.min = this.first;
+        this.first=null;
         for (int i = 0; i < maxRank; i++) {
             if (bucketsList[i] != null) {
                 if (bucketsList[i].key < this.min.key) {
                     this.min = bucketsList[i];
                 }
-                if (this.first == null) {
+                if (this.first == null || this.first==bucketsList[i]) {
                     this.first = bucketsList[i];
                     bucketsList[i].prev = bucketsList[i];
                     bucketsList[i].next = bucketsList[i];
@@ -177,6 +173,9 @@ public class FibonacciHeap
                     bucketsList[i].next = this.first;
                     this.first.prev.next = bucketsList[i];
                     this.first.prev = bucketsList[i];
+                    if (first.next==first){
+                        first.next=first.prev;
+                    }
                 }
             }
         }

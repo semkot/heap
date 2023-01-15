@@ -16,6 +16,15 @@ public class tester {
 		f.insert(19);
 		f.insert(24);
 
+
+		System.out.println(f.min.key);
+		printHeap(f);
+		f.deleteMin();
+		System.out.println(f.min.key);
+		printHeap(f);
+		f.deleteMin();
+		System.out.println(f.min.key);
+		printHeap(f);
 		f.deleteMin();
 		System.out.println(f.min.key);
 		printHeap(f);
@@ -26,9 +35,14 @@ public class tester {
 		System.out.println(f.min.key);
 		printHeap(f);
 		f.deleteMin();
-		System.out.println(f.min.prev.key);
 		System.out.println(f.min.key);
 		printHeap(f);
+		f.deleteMin();
+		System.out.println(f.min.key);
+		printHeap(f);
+		f.deleteMin();
+
+
 
 
 
