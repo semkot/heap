@@ -119,23 +119,35 @@ public class FibonacciHeap
             } while (current != this.first);
         }
 
+        if (this.isEmpty()){
+            this.min=null;
+            this.first=null;
+        }
+
 
     }
 
 
     private void consolidate() {
-        int maxRank = (int) Math.floor(Math.log(this.size) ) + 2;
+        int maxRank = (int) Math.floor(Math.log(this.size)) + 2;
         HeapNode[] bucketsList = new HeapNode[maxRank];
         for (int i = 0; i < maxRank; i++) {
             bucketsList[i] = null;
         }
-        HeapNode current = this.first;
+
+        // Create an array to store the roots of the heap
+        HeapNode[] roots = new HeapNode[this.size];
         int numRoots = 0;
+        HeapNode current = this.first;
         do {
-            numRoots++;
-            HeapNode x = current;
-            int rank = x.rank;
+            roots[numRoots] = current;
             current = current.next;
+            numRoots++;
+        } while (current != this.first);
+
+        for (int i = 0; i < numRoots; i++) {
+            HeapNode x = roots[i];
+            int rank = x.rank;
             while (bucketsList[rank] != null) {
                 HeapNode y = bucketsList[rank];
                 if (x.key > y.key) {
@@ -156,15 +168,16 @@ public class FibonacciHeap
                 rank++;
             }
             bucketsList[rank] = x;
-        } while (current != this.first);
+        }
+
+        this.first = null;
         this.min = this.first;
-        this.first=null;
         for (int i = 0; i < maxRank; i++) {
             if (bucketsList[i] != null) {
-                if (bucketsList[i].key < this.min.key) {
+                if (this.min==null || bucketsList[i].key < this.min.key) {
                     this.min = bucketsList[i];
                 }
-                if (this.first == null || this.first==bucketsList[i]) {
+                if (this.first == null) {
                     this.first = bucketsList[i];
                     bucketsList[i].prev = bucketsList[i];
                     bucketsList[i].next = bucketsList[i];
@@ -173,14 +186,11 @@ public class FibonacciHeap
                     bucketsList[i].next = this.first;
                     this.first.prev.next = bucketsList[i];
                     this.first.prev = bucketsList[i];
-                    if (first.next==first){
-                        first.next=first.prev;
-                    }
                 }
             }
         }
-
     }
+
 
 
     /**
