@@ -15,48 +15,31 @@ public class tester {
 		f.insert(18);
 		f.insert(19);
 		f.insert(24);
-//		f.insert(10);
-//		f.insert(11);
-//		f.insert(12);
-//		f.insert(13);
-//		f.insert(14);
-//		f.insert(15);
-//		f.insert(16);
 
+		FibonacciHeap g = new FibonacciHeap();
+		g.insert(2);
+		g.insert(1);
+		g.insert(122);
+		g.insert(101);
+		g.insert(155);
+		g.insert(176);
+		g.insert(5);
+		g.insert(11);
+		g.insert(16);
 
-
-		System.out.println(f.min.key);
-		printHeap(f);
+		g.deleteMin();
 		f.deleteMin();
-		System.out.println(f.min.key);
 		printHeap(f);
-		f.deleteMin();
-		System.out.println(f.min.key);
+		System.out.println();
+		printHeap(g);
+		f.meld(g);
+		System.out.println();
 		printHeap(f);
+		System.out.println();
 		f.deleteMin();
-		System.out.println(f.min.key);
+		System.out.println("last");
 		printHeap(f);
-		f.deleteMin();
 		System.out.println(f.min.key);
-		printHeap(f);
-		f.deleteMin();
-		System.out.println(f.min.key);
-		printHeap(f);
-		f.deleteMin();
-		System.out.println(f.min.key);
-		printHeap(f);
-		f.deleteMin();
-		System.out.println(f.min.key);
-		printHeap(f);
-		f.deleteMin();
-		System.out.println(f.min.key);
-		printHeap(f);
-		f.deleteMin();
-		System.out.println(f.min.key);
-		printHeap(f);
-		f.deleteMin();
-		System.out.println(f.min.key);
-
 
 
 
