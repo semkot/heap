@@ -1,5 +1,7 @@
 package heap;
 
+import static heap.tester.printHeap;
+
 /**
  * FibonacciHeap
  *
@@ -14,9 +16,9 @@ public class FibonacciHeap
     * Returns true if and only if the heap is empty.
     *   
     */
-	private HeapNode first;
-	private HeapNode min;
-    private int size;
+	public HeapNode first;
+	public HeapNode min;
+    public int size;
 
     private static int totalCuts = 0;
     private static int totalLinks = 0;
@@ -27,10 +29,13 @@ public class FibonacciHeap
         this.size=0;
 	
 	}
+    public int getSize(){
+        return this.size;
+    }
 	
     public boolean isEmpty()
     {
-    	return this.min==0;
+    	return (this.size==0);
     }
 		
    /**
@@ -44,23 +49,32 @@ public class FibonacciHeap
     public HeapNode insert(int key)
     {
         HeapNode newNode = new HeapNode(key);
-        if (this.min == null) {
-            this.first = newNode;
-            this.min = newNode;
-        } else {
-            newNode.prev = this.first;
-            newNode.next = this.first.next;
-            this.first.next.prev = newNode;
-            this.first.next = newNode;
-            if (key < this.min.key) {
-                min = newNode;
-            }
-        }
+        newNode.rank=0;
+        this.addToRootList(newNode);
         this.size++;
         return newNode;
     }
 
-   /**
+
+//     adds a node to the 'List' of trees of the heap
+    private void addToRootList(HeapNode node) {
+
+        if (this.first == null) {
+            this.first = node;
+            node.prev = node;
+            node.next = node;
+        } else {
+            node.prev = this.first.prev;
+            node.next = this.first;
+            this.first.prev.next = node;
+            this.first.prev = node;
+        }
+        if (this.min==null || node.key < this.min.key) {
+            this.min = node;
+        }
+    }
+
+    /**
     * public void deleteMin()
     *
     * Deletes the node containing the minimum key.
@@ -73,10 +87,11 @@ public class FibonacciHeap
         }
         HeapNode child = this.min.child;
         if (child != null) {
-            HeapNode current = child;
+            HeapNode current = child;//22
             do {
                 current.parent = null;
-                current = current.next;
+                current = current.next;//22
+
             } while (current != child);
             this.first.prev.next = child;
             child.prev.next = this.first;
@@ -84,22 +99,107 @@ public class FibonacciHeap
             this.first.prev = child.prev;
             child.prev = temp;
         }
-        this.min.prev.next = min.next;
-        this.min.next.prev = min.prev;
-        if (min == min.next) {
-            this.first = null;
-        } else {
-            this.first = min.next;
+        if (this.min == this.first) {
+            this.first = this.first.next;
         }
+        this.min.prev.next = this.min.next;
+        this.min.next.prev = this.min.prev;
         this.min = null;
         this.size--;
-        if (size > 0) {
+        this.min = this.first;
+        if (this.size > 0) {
             consolidate();
+            HeapNode current = this.first;
+            this.min = current;
+            do {
+                if (current.key < this.min.key) {
+                    this.min = current;
+                }
+                current = current.next;
+            } while (current != this.first);
         }
-     	
+
+        if (this.isEmpty()){
+            this.min=null;
+            this.first=null;
+        }
+
+
     }
 
-   /**
+
+    private void consolidate() {
+        int maxRank = (int) Math.floor(Math.log(this.size)) + 3;
+        HeapNode[] bucketsList = new HeapNode[maxRank];
+        for (int i = 0; i < maxRank; i++) {
+            bucketsList[i] = null;
+        }
+        HeapNode curr=this.first;
+        curr=curr.next;
+        int counter=1;
+        while (curr!=this.first){
+            counter++;
+            curr=curr.next;
+        }
+        // Create an array to store the roots of the heap
+        HeapNode[] roots = new HeapNode[counter];
+        int numRoots = 0;
+        HeapNode current = this.first;
+        do {
+            roots[numRoots] = current;
+            current = current.next;
+            numRoots++;
+        } while (current != this.first);
+
+        for (int i = 0; i < numRoots; i++) {
+            HeapNode x = roots[i];
+            int rank = x.rank;
+            while (bucketsList[rank] != null) {
+                HeapNode y = bucketsList[rank];
+                if (x.key > y.key) {
+                    HeapNode temp = x;
+                    x = y;
+                    y = temp;
+                }
+                if (y == this.first) {
+                    this.first = y.next;
+                }
+                if (y == this.min) {
+                    this.min = x;
+                }
+                y.prev.next = y.next;
+                y.next.prev = y.prev;
+                x.addChild(y);
+                bucketsList[rank] = null;
+                rank++;
+            }
+            bucketsList[rank] = x;
+        }
+
+        this.first = null;
+        this.min = this.first;
+        for (int i = 0; i < maxRank; i++) {
+            if (bucketsList[i] != null) {
+                if (this.min==null || bucketsList[i].key < this.min.key) {
+                    this.min = bucketsList[i];
+                }
+                if (this.first == null) {
+                    this.first = bucketsList[i];
+                    bucketsList[i].prev = bucketsList[i];
+                    bucketsList[i].next = bucketsList[i];
+                } else {
+                    bucketsList[i].prev = this.first.prev;
+                    bucketsList[i].next = this.first;
+                    this.first.prev.next = bucketsList[i];
+                    this.first.prev = bucketsList[i];
+                }
+            }
+        }
+    }
+
+
+
+    /**
     * public HeapNode findMin()
     *
     * Returns the node of the heap whose key is minimal, or null if the heap is empty.
@@ -107,7 +207,7 @@ public class FibonacciHeap
     */
     public HeapNode findMin()
     {
-    	return new HeapNode(678);// should be replaced by student code
+    	return this.min;
     } 
     
    /**
@@ -118,7 +218,27 @@ public class FibonacciHeap
     */
     public void meld (FibonacciHeap heap2)
     {
-    	  return; // should be replaced by student code   		
+        if (heap2.isEmpty()) {
+            return;
+        }
+        if (this.isEmpty()) {
+            this.first = heap2.first;
+            this.min = heap2.min;
+            this.size = heap2.size;
+            return;
+        }
+
+        HeapNode thisLast = this.first.prev;
+        HeapNode otherLast = heap2.first.prev;
+        thisLast.next = heap2.first;
+        heap2.first.prev = thisLast;
+        otherLast.next = this.first;
+        this.first.prev = otherLast;
+
+        if (heap2.min.key < this.min.key) {
+            this.min = heap2.min;
+        }
+        this.size += heap2.size;
     }
 
    /**
@@ -154,6 +274,9 @@ public class FibonacciHeap
     */
     public void delete(HeapNode x) 
     {    
+    	int min = this.min.key;
+    	decreaseKey(x, x.key - min + 1);
+    	deleteMin();
     	return; // should be replaced by student code
     }
 
@@ -195,8 +318,7 @@ public class FibonacciHeap
     		return;
     	}
     	cascadingCut(x, x.parent);
-    	
-    	
+   
     	return; // should be replaced by student code
     }
 
@@ -287,5 +409,41 @@ public class FibonacciHeap
     	public int getKey() {
     		return this.key;
     	}
-    }
+
+
+
+//        addchild: a function to add a child to a node and include all the pointers
+       public void addChild(HeapNode existingTree) {
+           if(existingTree.parent != null) {
+               existingTree.parent.removeChild(existingTree);
+           }
+           existingTree.parent = this;
+           existingTree.prev = existingTree;
+           existingTree.next = existingTree;
+           if(this.child == null) {
+               this.child = existingTree;
+           } else {
+               existingTree.prev = this.child.prev;
+               existingTree.next = this.child;
+               this.child.prev.next = existingTree;
+               this.child.prev = existingTree;
+           }
+           this.rank++;
+       }
+       //removeChild: a function to remove a child from a node and remove all the needed pointers
+       private void removeChild(HeapNode child) {
+           if (this.child == this.child.next) {
+               this.child = null;
+           } else {
+               child.prev.next = child.next;
+               child.next.prev = child.prev;
+               if (this.child == child) {
+                   this.child = child.next;
+               }
+           }
+           child.parent = null;
+           this.rank--;
+       }
+
+   }
 }
