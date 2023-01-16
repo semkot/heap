@@ -163,8 +163,40 @@ public class FibonacciHeap
     * Decreases the key of the node x by a non-negative value delta. The structure of the heap should be updated
     * to reflect this change (for example, the cascading cuts procedure should be applied if needed).
     */
+    public void cut(HeapNode x, HeapNode y) {
+    	x.parent = null;
+    	x.marked = false;
+    	y.rank -= 1;
+    	if (x.next == x)
+    		y.child = null;
+    	else {
+    		y.child = x.next;
+    		x.prev.next = x.next;
+    		x.next.prev = x.prev;
+    	}
+    	totalCuts += 1;
+    }
+    
+    public void cascadingCut(HeapNode x, HeapNode y) {
+    	cut(x, y);
+    	addToRootList(x);
+    	if (y.parent != null) {
+    		if (!y.marked)
+    			y.marked = true;
+    		else
+    			cascadingCut(y, y.parent);
+    	}
+    }
+    
     public void decreaseKey(HeapNode x, int delta)
     {    
+    	x.key -= delta;
+    	if (x.parent == null || x.key > x.parent.key) { // No structure change;
+    		return;
+    	}
+    	cascadingCut(x, x.parent);
+    	
+    	
     	return; // should be replaced by student code
     }
 
