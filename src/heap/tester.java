@@ -14,21 +14,22 @@ public class tester {
 		f.insert(10);
 		f.insert(15);
 		f.insert(17);
-		HeapNode h18 = f.insert(18);
-		HeapNode h19 = f.insert(19);
-		f.insert(24);
-		printHeap(f);
+//		HeapNode h18 = f.insert(18);
+//		HeapNode h19 = f.insert(19);
+//		f.insert(24);
+//		printHeap(f);
 		f.deleteMin();
+//		printHeap(f);
+//		f.delete(h19);
+//		//f.decreaseKey(h19,10);
+//	//	printHeap(f);
+//		//f.deleteMin();
+//
+//		//System.out.print(f.min.key);
+//		//f.delete(h18);
+//		printHeap(f);
 		printHeap(f);
-		f.delete(h19);
-		//f.decreaseKey(h19,10);
-	//	printHeap(f);
-		//f.deleteMin();
-		
-		//System.out.print(f.min.key);
-		//f.delete(h18);
-		printHeap(f);
-
+		System.out.println(f.first.key);
 		
 /*
 		FibonacciHeap g = new FibonacciHeap();

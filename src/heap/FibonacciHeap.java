@@ -68,6 +68,7 @@ public class FibonacciHeap
             node.next = this.first;
             this.first.prev.next = node;
             this.first.prev = node;
+            this.first=node;
         }
         if (this.min==null || node.key < this.min.key) {
             this.min = node;
@@ -177,7 +178,7 @@ public class FibonacciHeap
         }
 
         this.first = null;
-        this.min = this.first;
+        this.min = null;
         for (int i = 0; i < maxRank; i++) {
             if (bucketsList[i] != null) {
                 if (this.min==null || bucketsList[i].key < this.min.key) {
