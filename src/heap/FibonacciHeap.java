@@ -46,24 +46,31 @@ public class FibonacciHeap
     * 
     * Returns the newly created node.
     */
+
+// Inserts a new node with the given key into the heap.
     public HeapNode insert(int key)
     {
         HeapNode newNode = new HeapNode(key);
         newNode.rank=0;
-        this.addToRootList(newNode);
+        this.addToRootList(newNode);// calls the addToRootList function (O(1)) to adds a node to the 'List' of trees of the heap
         this.size++;
         return newNode;
     }
+// The total complexity is of the addToRootList function, which is O(1)
 
-
-//     adds a node to the 'List' of trees of the heap
+    /**
+     *  A helper function that adds a node to the root list of the heap.
+     *  Time Complexity: O(1)
+     */
     private void addToRootList(HeapNode node) {
 
         if (this.first == null) {
+            // if the root list is empty, set the first, prev and next pointers of the new node to itself
             this.first = node;
             node.prev = node;
             node.next = node;
         } else {
+            // otherwise, link the new node to the existing list
             node.prev = this.first.prev;
             node.next = this.first;
             this.first.prev.next = node;
@@ -71,6 +78,7 @@ public class FibonacciHeap
             this.first=node;
         }
         if (this.min==null || node.key < this.min.key) {
+            // update the min pointer if necessary
             this.min = node;
         }
     }
@@ -83,17 +91,19 @@ public class FibonacciHeap
     */
     public void deleteMin()
     {
-        if (this.min == null) {
+        if (this.min == null) {// if the heap is empty, stop code
             return;
         }
         HeapNode child = this.min.child;
-        if (child != null) {
-            HeapNode current = child;//22
+        if (child != null) { // if the element to be deleted has children, remove the parent pointer from them
+            HeapNode current = child;
             do {
                 current.parent = null;
-                current = current.next;//22
+                current = current.next;
 
             } while (current != child);
+
+            // join the children list to the root list
             this.first.prev.next = child;
             child.prev.next = this.first;
             HeapNode temp = this.first.prev;
@@ -103,13 +113,17 @@ public class FibonacciHeap
         if (this.min == this.first) {
             this.first = this.first.next;
         }
+        // remove the minimum element from the list
         this.min.prev.next = this.min.next;
         this.min.next.prev = this.min.prev;
-        this.min = null;
         this.size--;
+        // update the new min
         this.min = this.first;
         if (this.size > 0) {
+            // Consolidate the heap after deleting the minimum element
             consolidate();
+
+            // Update the minimum element
             HeapNode current = this.first;
             this.min = current;
             do {
@@ -128,10 +142,14 @@ public class FibonacciHeap
 
     }
 
-
+    /**
+     * Consolidates the heap by linking trees of the same rank together.
+     * Time Complexity:
+     *
+     */
     private void consolidate() {
-        int maxRank = (int) Math.floor(Math.log(this.size)) + 3;
-        HeapNode[] bucketsList = new HeapNode[maxRank];
+        int maxRank = (int) Math.floor(Math.log(this.size)) + 3;// calculate the maximum possible rank
+        HeapNode[] bucketsList = new HeapNode[maxRank]; //create an array of buckets to store nodes of the same rank
         for (int i = 0; i < maxRank; i++) {
             bucketsList[i] = null;
         }
@@ -143,7 +161,8 @@ public class FibonacciHeap
             curr=curr.next;
         }
         // Create an array to store the roots of the heap
-        HeapNode[] roots = new HeapNode[counter];
+        HeapNode[] roots = new HeapNode[counter];    // Create an array to store the roots of the heap
+
         int numRoots = 0;
         HeapNode current = this.first;
         do {
@@ -152,6 +171,10 @@ public class FibonacciHeap
             numRoots++;
         } while (current != this.first);
 
+        /**
+         * loops through the roots of the heap, and compares each root to the trees of the same rank in the bucket list.
+         * If a root has the same rank as a tree in the bucket list, it links them together by adding one tree as a child of the other.
+         */
         for (int i = 0; i < numRoots; i++) {
             HeapNode x = roots[i];
             int rank = x.rank;
@@ -176,7 +199,10 @@ public class FibonacciHeap
             }
             bucketsList[rank] = x;
         }
-
+/**
+ *  iterates over the array of buckets.
+ *  re-add the newly linked trees back to the root list and update the min and first pointers if necessary.
+ */
         this.first = null;
         this.min = null;
         for (int i = 0; i < maxRank; i++) {
