@@ -30,6 +30,7 @@ public class testerEden {
         f.deleteMin();
         for (int i = (int) (Math.log(m) / Math.log(2)); i >= 1; i--) {
             f.decreaseKey(nodes[(int) (m - Math.pow(2, i) + 1)], m + 1);
+            System.out.println(nodes[(int) (m - Math.pow(2, i) + 1)].key);
         }
 
         return f;
