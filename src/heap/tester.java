@@ -20,17 +20,20 @@ public class tester {
 		HeapNode h19 = f.insert(19);
 		f.insert(24);
 //		printHeap(f);
+		
 		f.deleteMin();
 //		printHeap(f);
 //		f.delete(h19);
 //		//f.decreaseKey(h19,10);
 //	//	printHeap(f);
-//		//f.deleteMin();
-//
+	
+		f.deleteMin();
+		printHeap(f);
+		System.out.println(Arrays.toString(f.countersRep()));
 //		//System.out.print(f.min.key);
 //		//f.delete(h18);
 //		printHeap(f);
-		printHeap(f);
+		
 		System.out.println(Arrays.toString(f.kMin(f, 3)));
 		
 /*

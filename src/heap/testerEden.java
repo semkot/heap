@@ -8,56 +8,9 @@ public class testerEden {
 
     public static void main(String[] args) {
         FibonacciHeap f = new FibonacciHeap();
-        f.insert(22);
-        f.insert(13);
-        f.insert(12);
-        f.insert(10);
-        f.insert(15);
-        f.insert(17);
-//		HeapNode h18 = f.insert(18);
-//		HeapNode h19 = f.insert(19);
-//		f.insert(24);
-//		printHeap(f);
-        f.deleteMin();
-//		printHeap(f);
-//		f.delete(h19);
-//		//f.decreaseKey(h19,10);
-//	//	printHeap(f);
-//		//f.deleteMin();
-//
-//		//System.out.print(f.min.key);
-//		//f.delete(h18);
-//		printHeap(f);
-        printHeap(f);
-        System.out.println(f.first.key);
-
-/*
-		FibonacciHeap g = new FibonacciHeap();
-		g.insert(2);
-		g.insert(1);
-		g.insert(122);
-		g.insert(101);
-		g.insert(155);
-		g.insert(176);
-		g.insert(5);
-		g.insert(11);
-		g.insert(16);
-
-		g.deleteMin();
-		f.deleteMin();
-		printHeap(f);
-		System.out.println();
-		printHeap(g);
-		f.meld(g);
-		System.out.println();
-		printHeap(f);
-		System.out.println();
-		f.deleteMin();
-		System.out.println("last");
-		printHeap(f);
-		System.out.println(f.min.key);
-*/
-
+        for (int i=1;i<5;i++){
+            insertAndDelete((int)Math.pow(2,i));
+        }
 
 
 
@@ -68,6 +21,22 @@ public class testerEden {
 
 
     }
+    public static FibonacciHeap insertAndDelete(int m) {
+        FibonacciHeap f = new FibonacciHeap();
+        HeapNode[] nodes = new HeapNode[m];
+        for (int k = m - 1; k >= 0; k--) {
+            nodes[k] = f.insert(k);
+        }
+        f.deleteMin();
+        for (int i = (int) (Math.log(m) / Math.log(2)); i >= 1; i--) {
+            f.decreaseKey(nodes[(int) (m - Math.pow(2, i) + 1)], m + 1);
+            System.out.println(nodes[(int) (m - Math.pow(2, i) + 1)].key);
+        }
+
+        return f;
+    }
+
+
     static void printHeap(FibonacciHeap f) {
         if (f.isEmpty()) {
             System.out.println("Heap is empty!");
