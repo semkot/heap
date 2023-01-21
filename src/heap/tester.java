@@ -1,8 +1,10 @@
 package heap;
 
 import java.io.Console;
+import java.util.Arrays;
 
 import heap.FibonacciHeap.HeapNode;
+import heap.FibonacciHeap.kMinHeapNode;
 
 public class tester {
 
@@ -14,9 +16,9 @@ public class tester {
 		f.insert(10);
 		f.insert(15);
 		f.insert(17);
-//		HeapNode h18 = f.insert(18);
-//		HeapNode h19 = f.insert(19);
-//		f.insert(24);
+		HeapNode h18 = f.insert(18);
+		HeapNode h19 = f.insert(19);
+		f.insert(24);
 //		printHeap(f);
 		f.deleteMin();
 //		printHeap(f);
@@ -29,7 +31,7 @@ public class tester {
 //		//f.delete(h18);
 //		printHeap(f);
 		printHeap(f);
-		System.out.println(f.first.key);
+		System.out.println(Arrays.toString(f.kMin(f, 3)));
 		
 /*
 		FibonacciHeap g = new FibonacciHeap();

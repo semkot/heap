@@ -1,6 +1,6 @@
 package heap;
 
-import static heap.tester.printHeap;
+import java.util.Arrays;
 
 /**
  * FibonacciHeap
@@ -51,6 +51,15 @@ public class FibonacciHeap
     public HeapNode insert(int key)
     {
         HeapNode newNode = new HeapNode(key);
+        newNode.rank=0;
+        this.addToRootList(newNode);// calls the addToRootList function (O(1)) to adds a node to the 'List' of trees of the heap
+        this.size++;
+        return newNode;
+    }
+    // insert function to help Kmin
+    public kMinHeapNode insertKMin(HeapNode node)
+    {
+        kMinHeapNode newNode = new kMinHeapNode(node);
         newNode.rank=0;
         this.addToRootList(newNode);// calls the addToRootList function (O(1)) to adds a node to the 'List' of trees of the heap
         this.size++;
@@ -383,7 +392,7 @@ public class FibonacciHeap
     */
     public static int totalLinks()
     {    
-    	return -345; // should be replaced by student code
+    	return totalLinks; // should be replaced by student code
     }
 
    /**
@@ -395,7 +404,7 @@ public class FibonacciHeap
     */
     public static int totalCuts()
     {    
-    	return -456; // should be replaced by student code
+    	return totalCuts; // should be replaced by student code
     }
 
      /**
@@ -408,7 +417,22 @@ public class FibonacciHeap
     */
     public static int[] kMin(FibonacciHeap H, int k)
     {    
-        int[] arr = new int[100];
+        int[] arr = new int[k];
+        FibonacciHeap f = new FibonacciHeap();
+        f.insertKMin(H.min);
+        for (int i = 0; i < k; i++) {
+        	kMinHeapNode node =  (kMinHeapNode) f.min;
+        	HeapNode orig = node.original;
+        	f.deleteMin();
+        	arr[i] = node.key;
+        	HeapNode child = orig.child;  	
+        	if (child != null) {
+        		do{
+        			f.insertKMin(child);
+        			child = child.next;
+        		}while (child != orig.child);	
+        	}
+        }
         return arr; // should be replaced by student code
     }
     
@@ -419,6 +443,16 @@ public class FibonacciHeap
     * (for example HeapNode), do it in this file, not in another file. 
     *  
     */
+    public static class kMinHeapNode extends HeapNode{
+    
+    	public HeapNode original;
+    	public kMinHeapNode(HeapNode h) {
+    		super(h.key);
+    		this.original = h;
+    	}
+    	
+    	
+    }
     public static class HeapNode{
 
     	public int key;
