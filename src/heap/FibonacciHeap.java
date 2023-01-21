@@ -19,6 +19,7 @@ public class FibonacciHeap
 	public HeapNode first;
 	public HeapNode min;
     public int size;
+    public int marked;
 
     private static int totalCuts = 0;
     private static int totalLinks = 0;
@@ -27,6 +28,7 @@ public class FibonacciHeap
 		this.first=null;
         this.min=null;
         this.size=0;
+        this.marked=0;
 	
 	}
     public int getSize(){
@@ -334,7 +336,10 @@ public class FibonacciHeap
     */
     public void cut(HeapNode x, HeapNode y) {
     	x.parent = null;
-    	x.marked = false;
+    	if (x.marked == true){
+    		x.marked = false;
+    		this.marked --;
+    	}
     	y.rank -= 1;
     	if (x.next == x)
     		y.child = null;
@@ -350,8 +355,10 @@ public class FibonacciHeap
     	cut(x, y);
     	addToRootList(x);
     	if (y.parent != null) {
-    		if (!y.marked)
+    		if (!y.marked) {
     			y.marked = true;
+    			this.marked ++;
+    		}
     		else
     			cascadingCut(y, y.parent);
     	}
@@ -375,7 +382,7 @@ public class FibonacciHeap
     */
     public int nonMarked() 
     {    
-        return -232; // should be replaced by student code
+        return this.size - this.marked; // should be replaced by student code
     }
 
    /**
@@ -389,7 +396,13 @@ public class FibonacciHeap
     */
     public int potential() 
     {    
-        return -234; // should be replaced by student code
+    	int counter = 0;
+    	HeapNode h = this.first;
+    	do {
+    		 counter ++;
+    		 h = h.next;
+    	}while (h != this.first);
+        return counter * 2 + this.marked; // should be replaced by student code
     }
 
    /**

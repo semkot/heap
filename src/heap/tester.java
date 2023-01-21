@@ -19,22 +19,23 @@ public class tester {
 		HeapNode h18 = f.insert(18);
 		HeapNode h19 = f.insert(19);
 		f.insert(24);
-//		printHeap(f);
-		
+		printHeap(f);
+		System.out.println(f.potential());
 		f.deleteMin();
 //		printHeap(f);
 //		f.delete(h19);
 //		//f.decreaseKey(h19,10);
-//	//	printHeap(f);
-	
-		f.deleteMin();
+	printHeap(f);
+		System.out.println(f.potential());
+		f.delete(h19);
+		System.out.println(f.potential());
 		printHeap(f);
 		System.out.println(Arrays.toString(f.countersRep()));
 //		//System.out.print(f.min.key);
 //		//f.delete(h18);
 //		printHeap(f);
 		
-		System.out.println(Arrays.toString(f.kMin(f, 3)));
+		//System.out.println(Arrays.toString(f.kMin(f, 3)));
 		
 /*
 		FibonacciHeap g = new FibonacciHeap();
