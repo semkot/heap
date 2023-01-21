@@ -27,6 +27,8 @@ public class FibonacciHeap
 		this.first=null;
         this.min=null;
         this.size=0;
+        this.totalLinks=0;
+        this.totalCuts=0;
 	
 	}
     public int getSize(){
@@ -176,6 +178,7 @@ public class FibonacciHeap
             HeapNode x = roots[i];
             int rank = x.rank;
             while (bucketsList[rank] != null) {
+                this.totalLinks++;
                 HeapNode y = bucketsList[rank];
                 if (x.key > y.key) {
                     HeapNode temp = x;
