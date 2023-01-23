@@ -7,10 +7,9 @@ import heap.FibonacciHeap.HeapNode;
 public class testerEden {
 
     public static void main(String[] args) {
-        FibonacciHeap f = new FibonacciHeap();
-        for (int i=1;i<5;i++){
-            insertAndDelete((int)Math.pow(2,i));
-        }
+
+        insertAndDelete((int)Math.pow(2,10));
+
 
 
 
@@ -27,6 +26,7 @@ public class testerEden {
         for (int k = m - 1; k >= 0; k--) {
             nodes[k] = f.insert(k);
         }
+        printHeap(f);
         f.deleteMin();
         for (int i = (int) (Math.log(m) / Math.log(2)); i >= 1; i--) {
             f.decreaseKey(nodes[(int) (m - Math.pow(2, i) + 1)], m + 1);

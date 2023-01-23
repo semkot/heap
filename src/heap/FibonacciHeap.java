@@ -159,7 +159,7 @@ public class FibonacciHeap
      *
      */
     private void consolidate() {
-        int maxRank = (int) Math.floor(Math.log(this.size)) + 3;// calculate the maximum possible rank
+        int maxRank = (int) Math.floor(Math.log(this.size)/Math.log(2)) + 1;// calculate the maximum possible rank
         HeapNode[] bucketsList = new HeapNode[maxRank]; //create an array of buckets to store nodes of the same rank
         HeapNode curr=this.first;
         curr=curr.next;
