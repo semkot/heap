@@ -38,7 +38,7 @@ public class testerEden {
         long runTime = endTime - startTime;
         int totalLinks = f.totalLinks();
         int totalCuts = f.totalCuts();
-        int potential = f.size + f.marked - 1;
+        int potential = f.potential();
         System.out.println("m\tRun-Time (ms)\ttotalLinks\ttotalCuts\tPotential");
         System.out.println(m + "\t" + runTime + "\t" + totalLinks + "\t" + totalCuts + "\t" + potential);
     }

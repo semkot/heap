@@ -402,7 +402,7 @@ public class FibonacciHeap
     		 counter ++;
     		 h = h.next;
     	}while (h != this.first);
-        return counter * 2 + this.marked; // should be replaced by student code
+        return counter  + this.marked *2; // should be replaced by student code
     }
 
    /**
