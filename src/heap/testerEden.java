@@ -32,7 +32,7 @@ public class testerEden {
         }
         f.deleteMin();
         for (int i = (int) (Math.log(m) / Math.log(2)); i >= 1; i--) {
-            f.decreaseKey(nodes[(int) (m - Math.pow(2, i) + 1)], m + 1);
+            f.decreaseKey(nodes[(int) (m - Math.pow(2, i) )], m + 1);
         }
         long endTime = System.currentTimeMillis();
         long runTime = endTime - startTime;
